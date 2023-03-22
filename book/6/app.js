@@ -8,6 +8,8 @@ const fs = require("fs");
 const multer = require("multer");
 
 dotenv.config();
+const indexRouter = require("./routes/index");
+const userRouter = require("./routes/user");
 
 const app = express();
 const port = 9393;
@@ -62,25 +64,19 @@ app.use(
     })
 );
 
+// 라우터 연결
+app.use("/", indexRouter);
+app.use("/user", userRouter);
+
 app.use((req, res, next) => {
     console.log("GET EVERY REQUEST");
     next();
-});
-
-app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).send(err.message);
 });
 
 // =============== GET API ===============
 
 app.get("/upload", (req, res) => {
     res.sendFile(path.join(__dirname, "multipart.html"));
-});
-
-app.get("/", (req, res, next) => {
-    console.log("GET REQUEST");
-    res.send("ABCDEFG");
 });
 
 // =============== POST API ===============
